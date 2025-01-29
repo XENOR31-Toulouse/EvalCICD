@@ -33,3 +33,7 @@ test('DELETE /tasks/:id', async () => {
     expect(response.body).toEqual({ message: "Task deleted successfully" }); 
 });
 
+afterAll(() => {
+    server.close();  // If you started a server in your tests
+  });
+  
