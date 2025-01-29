@@ -48,7 +48,8 @@ function addTaskToList(task) {
     taskText.className = task.completed ? 'completed' : '';
     li.appendChild(taskText);
 
-    taskText.addEventListener('click', () => toggleTaskCompletion(task));
+    // taskText.addEventListener('click', () => toggleTaskCompletion(task));
+    taskText.addEventListener('click', () => editTaskTitle(task, taskText));
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
@@ -57,6 +58,25 @@ function addTaskToList(task) {
     li.appendChild(deleteBtn);
 
     taskList.appendChild(li);
+}
+
+function editTaskTitle(task, taskText) {
+
+    const newTitle = prompt('Enter new title:', task.title);
+    if (newTitle) {
+        const updatedTask = { ...task, title: newTitle };
+
+        fetch(`http://localhost:3000/tasks/${task.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedTask),
+        })
+            .then(response => response.json())
+            .then(updatedTaskData => {
+                taskText.textContent = updatedTaskData.title;
+            })
+            .catch(error => console.error('Error updating task:', error));
+    }
 }
 
 
