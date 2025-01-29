@@ -14,5 +14,6 @@ describe('To Do List', () => {
 
     cy.get('[data-cy=task-list]')
       .contains('Task 1');
+    
   });
 });
