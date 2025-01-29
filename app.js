@@ -1,18 +1,16 @@
 /**
  * @file app.js
- * @summary Express server for tasks API
- * @description This file defines the Express server for the tasks API. It includes routes for creating, reading, updating, and deleting tasks.
+ * @summary Express server for managing tasks
+ * @description This file sets up an Express server to provide an API for creating, reading, updating, and deleting tasks.
  * @requires express
  * @requires cors
  * @exports app
  * @exports server
- * 
  */
-
-
 
 import express from 'express';
 import cors from 'cors';
+
 const app = express();
 const PORT = 3000;
 
@@ -27,13 +25,13 @@ let idCounter = 1;
  * @route /tasks
  * @description Create a new task
  * @param {string} title - The title of the task
- * @param {boolean} completed - The status of the task (completed or not)
- * @returns {object} The new task
+ * @param {boolean} completed - The task's completion status
+ * @returns {object} The newly created task
  * @throws {400} If title or completed field is missing
  * @example
  * {
- *  "title": "Task 1",
- * "completed": false
+ *   "title": "Task 1",
+ *   "completed": false
  * }
  */
 
@@ -41,7 +39,7 @@ app.post('/tasks', (req, res) => {
     const { title, completed } = req.body;
 
     if (!title || typeof completed !== 'boolean') {
-        return res.status(400).json({ error: "Title and completed field are required." });
+        return res.status(400).json({ error: "Both title and completed status are required." });
     }
 
     const newTask = {
@@ -57,15 +55,15 @@ app.post('/tasks', (req, res) => {
 /**
  * @method GET
  * @route /tasks
- * @description Get all tasks
- * @returns {array} An array of tasks
+ * @description Retrieve all tasks
+ * @returns {array} A list of tasks
  * @example
  * [
- * {
- * "id": 1,
- * "title": "Task 1",
- * "completed": false
- * }
+ *   {
+ *     "id": 1,
+ *     "title": "Task 1",
+ *     "completed": false
+ *   }
  * ]
  */
 
@@ -73,19 +71,18 @@ app.get('/tasks', (req, res) => {
     res.json(tasks);
 });
 
-
 /**
  * @method PUT
  * @route /tasks/:id
- * @description Update a task
+ * @description Update an existing task
  * @param {string} title - The updated title of the task
- * @param {boolean} completed - The updated status of the task (completed or not)
+ * @param {boolean} completed - The updated completion status of the task
  * @returns {object} The updated task
- * @throws {404} If the task is not found
+ * @throws {404} If the task with the given ID is not found
  * @example
  * {
- * "title": "Task 1 updated",
- * "completed": true
+ *   "title": "Updated Task 1",
+ *   "completed": true
  * }
  */
 
@@ -94,7 +91,7 @@ app.put('/tasks/:id', (req, res) => {
     const { title, completed } = req.body;
 
     const task = tasks.find(t => t.id === taskId);
-    
+
     if (!task) {
         return res.status(404).json({ error: "Task not found" });
     }
@@ -105,16 +102,14 @@ app.put('/tasks/:id', (req, res) => {
     res.json(task);
 });
 
-
 /**
  * @method DELETE
  * @route /tasks/:id
- * @description Delete a task
- * @returns {object} A message indicating the task was deleted successfully
- * @throws {404} If the task is not found
+ * @description Delete a task by ID
+ * @returns {object} A confirmation message
+ * @throws {404} If the task with the given ID is not found
  * @example
  * DELETE /tasks/1
- * 
  */
 
 app.delete('/tasks/:id', (req, res) => {
@@ -128,7 +123,6 @@ app.delete('/tasks/:id', (req, res) => {
     tasks.splice(taskIndex, 1);
     res.json({ message: "Task deleted successfully" });
 });
-
 
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
