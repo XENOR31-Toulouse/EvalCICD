@@ -3,8 +3,8 @@ import cors from 'cors';
 const app = express();
 const PORT = 3000;
 
-app.use(cors()); 
-app.use(express.json()); 
+app.use(cors());
+app.use(express.json());
 
 let tasks = [];
 let idCounter = 1;
@@ -26,11 +26,9 @@ app.post('/tasks', (req, res) => {
     res.status(201).json(newTask);
 });
 
-
 app.get('/tasks', (req, res) => {
     res.json(tasks);
 });
-
 
 app.put('/tasks/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
@@ -48,7 +46,6 @@ app.put('/tasks/:id', (req, res) => {
     res.json(task);
 });
 
-
 app.delete('/tasks/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const taskIndex = tasks.findIndex(t => t.id === taskId);
@@ -61,9 +58,10 @@ app.delete('/tasks/:id', (req, res) => {
     res.json({ message: "Task deleted successfully" });
 });
 
-
-app.listen(PORT, () => {
+// Start and export the server instance
+const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-export default app;  
+export default app;
+export { server }; // Export the server instance
