@@ -58,10 +58,10 @@ app.delete('/tasks/:id', (req, res) => {
     res.json({ message: "Task deleted successfully" });
 });
 
-// Start and export the server instance
+
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 export default app;
-export { server }; // Export the server instance
+export { server };
