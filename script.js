@@ -48,12 +48,11 @@ function addTaskToList(task) {
     taskText.className = task.completed ? 'completed' : '';
     li.appendChild(taskText);
 
-    // taskText.addEventListener('click', () => toggleTaskCompletion(task));
     taskText.addEventListener('click', () => editTaskTitle(task, taskText));
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
-    deleteBtn.setAttribute('data-cy', `delete-task-${task.id}`); // Add data-cy attribute
+    deleteBtn.setAttribute('data-cy', `delete-task-${task.id}`); 
     deleteBtn.addEventListener('click', () => deleteTask(task));
     li.appendChild(deleteBtn);
 
