@@ -12,7 +12,6 @@ app.use(express.json());
 let tasks = [];
 let idCounter = 1;
 
-// Swagger configuration
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
@@ -22,7 +21,7 @@ const swaggerOptions = {
             description: 'A simple Task management API',
         },
     },
-    apis: ['./app.js'], // Path to the API docs
+    apis: ['./app.js'], 
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
