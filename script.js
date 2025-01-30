@@ -14,7 +14,7 @@ addTaskBtn.addEventListener('click', async () => {
         const newTask = { title, completed: false };
 
         try {
-            const response = await fetch('http://localhost:3000/tasks', {
+            const response = await fetch('http://localhost:8080/tasks', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newTask),
@@ -31,7 +31,7 @@ addTaskBtn.addEventListener('click', async () => {
 
 async function fetchTasks() {
     try {
-        const response = await fetch('http://localhost:3000/tasks');
+        const response = await fetch('http://localhost:8080/tasks');
         const tasks = await response.json();
         tasks.forEach(task => addTaskToList(task));
     } catch (error) {
@@ -65,7 +65,7 @@ function editTaskTitle(task, taskText) {
     if (newTitle) {
         const updatedTask = { ...task, title: newTitle };
 
-        fetch(`http://localhost:3000/tasks/${task.id}`, {
+        fetch(`http://localhost:8080/tasks/${task.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedTask),
@@ -84,7 +84,7 @@ async function toggleTaskCompletion(task) {
     const updatedTask = { ...task, completed: !task.completed };
 
     try {
-        const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+        const response = await fetch(`http://localhost:8080/tasks/${task.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedTask),
@@ -100,7 +100,7 @@ async function toggleTaskCompletion(task) {
 
 async function deleteTask(task) {
     try {
-        const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
+        const response = await fetch(`http://localhost:8080/tasks/${task.id}`, {
             method: 'DELETE',
         });
         const result = await response.json();
