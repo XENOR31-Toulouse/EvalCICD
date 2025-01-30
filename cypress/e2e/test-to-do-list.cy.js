@@ -10,7 +10,7 @@ describe('To Do List', () => {
 
     cy.get('[data-cy=add-task-button]').click();
 
-    cy.wait(500); // Ensure the UI updates
+    cy.wait(500); 
 
     cy.get('[data-cy=task-list]')
       .contains('Task 1')
@@ -22,7 +22,7 @@ describe('To Do List', () => {
     cy.get('[data-cy=add-task-button]').click();
     cy.wait(500);
 
-    // Find the task and mark it as completed
+
     cy.get('[data-cy=task-list]')
       .contains('Task 2')
       .parent()
@@ -41,13 +41,13 @@ describe('To Do List', () => {
 
     cy.get('[data-cy=task-list]')
       .contains('Task 3')
-      .dblclick(); // Simulate double-click to edit (if implemented)
+      .dblclick(); 
 
     cy.window().then((win) => {
       cy.stub(win, 'prompt').returns('Updated Task 3');
       cy.get('[data-cy=task-list]')
         .contains('Task 3')
-        .click(); // Trigger edit function
+        .click(); 
     });
 
     cy.get('[data-cy=task-list]')
