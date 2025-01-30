@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "cypress:run": "cypress run",
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",
