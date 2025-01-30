@@ -21,7 +21,7 @@ const swaggerOptions = {
             description: 'A simple Task management API',
         },
     },
-    apis: ['./app.js'], 
+    apis: ['./app.js'], // Path to the API docs
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -138,3 +138,5 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
 });
+
+export { app, server };
