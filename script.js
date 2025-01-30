@@ -43,21 +43,29 @@ async function fetchTasks() {
 function addTaskToList(task) {
     const li = document.createElement('li');
     li.id = `task-${task.id}`;
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = task.completed;
+    checkbox.addEventListener('change', () => toggleTaskCompletion(task));
+
     const taskText = document.createElement('span');
     taskText.textContent = task.title;
     taskText.className = task.completed ? 'completed' : '';
-    li.appendChild(taskText);
 
     taskText.addEventListener('click', () => editTaskTitle(task, taskText));
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
-    deleteBtn.setAttribute('data-cy', `delete-task-${task.id}`); 
     deleteBtn.addEventListener('click', () => deleteTask(task));
+
+    li.appendChild(checkbox);
+    li.appendChild(taskText);
     li.appendChild(deleteBtn);
 
     taskList.appendChild(li);
 }
+
 
 function editTaskTitle(task, taskText) {
 
