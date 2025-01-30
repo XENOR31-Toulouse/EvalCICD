@@ -12,6 +12,7 @@ app.use(express.json());
 let tasks = [];
 let idCounter = 1;
 
+// Swagger configuration
 const swaggerOptions = {
     definition: {
         openapi: '3.0.0',
@@ -134,9 +135,9 @@ app.delete('/tasks/:id', (req, res) => {
     res.json({ message: "Task deleted successfully" });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
     console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
 });
 
-export { app, server };
+export { server };
