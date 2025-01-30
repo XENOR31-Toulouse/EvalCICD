@@ -26,21 +26,13 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file app.js
- * @summary Express server for managing tasks
- * @description This file sets up an Express server to provide an API for creating, reading, updating, and deleting tasks.
- * @requires express
- * @requires cors
- * @exports app
- * @exports server
- */
-
-import express from 'express';
+            <pre class="prettyprint source linenums"><code>import express from 'express';
 import cors from 'cors';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 app.use(cors());
 app.use(express.json());
@@ -48,115 +40,153 @@ app.use(express.json());
 let tasks = [];
 let idCounter = 1;
 
-/**
- * @method POST
- * @route /tasks
- * @description Create a new task
- * @param {string} title - The title of the task
- * @param {boolean} completed - The task's completion status
- * @returns {object} The newly created task
- * @throws {400} If title or completed field is missing
- * @example
- * {
- *   "title": "Task 1",
- *   "completed": false
- * }
- */
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Task API',
+            version: '1.0.0',
+            description: 'A simple Task management API',
+        },
+    },
+    apis: ['./app.js'], 
+};
 
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+/**
+ * @swagger
+ * /tasks:
+ *   post:
+ *     summary: Create a new task
+ *     description: Adds a new task to the list.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               completed:
+ *                 type: boolean
+ *     responses:
+ *       201:
+ *         description: Task created successfully
+ *
+ * @function
+ * @name createTask
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
+ */
 app.post('/tasks', (req, res) => {
     const { title, completed } = req.body;
-
     if (!title || typeof completed !== 'boolean') {
         return res.status(400).json({ error: "Both title and completed status are required." });
     }
-
-    const newTask = {
-        id: idCounter++,
-        title,
-        completed: completed || false
-    };
-
+    const newTask = { id: idCounter++, title, completed };
     tasks.push(newTask);
     res.status(201).json(newTask);
 });
 
 /**
- * @method GET
- * @route /tasks
- * @description Retrieve all tasks
- * @returns {array} A list of tasks
- * @example
- * [
- *   {
- *     "id": 1,
- *     "title": "Task 1",
- *     "completed": false
- *   }
- * ]
+ * @swagger
+ * /tasks:
+ *   get:
+ *     summary: Retrieve all tasks
+ *     responses:
+ *       200:
+ *         description: A list of tasks
+ *
+ * @function
+ * @name getTasks
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
  */
-
 app.get('/tasks', (req, res) => {
     res.json(tasks);
 });
 
 /**
- * @method PUT
- * @route /tasks/:id
- * @description Update an existing task
- * @param {string} title - The updated title of the task
- * @param {boolean} completed - The updated completion status of the task
- * @returns {object} The updated task
- * @throws {404} If the task with the given ID is not found
- * @example
- * {
- *   "title": "Updated Task 1",
- *   "completed": true
- * }
+ * @swagger
+ * /tasks/{id}:
+ *   put:
+ *     summary: Update a task
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               completed:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Task updated successfully
+ *
+ * @function
+ * @name updateTask
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
  */
-
 app.put('/tasks/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const { title, completed } = req.body;
-
     const task = tasks.find(t => t.id === taskId);
-
     if (!task) {
         return res.status(404).json({ error: "Task not found" });
     }
-
     if (title) task.title = title;
     if (typeof completed === 'boolean') task.completed = completed;
-
     res.json(task);
 });
 
 /**
- * @method DELETE
- * @route /tasks/:id
- * @description Delete a task by ID
- * @returns {object} A confirmation message
- * @throws {404} If the task with the given ID is not found
- * @example
- * DELETE /tasks/1
+ * @swagger
+ * /tasks/{id}:
+ *   delete:
+ *     summary: Delete a task by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Task deleted successfully
+ *
+ * @function
+ * @name deleteTask
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
  */
-
 app.delete('/tasks/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
     const taskIndex = tasks.findIndex(t => t.id === taskId);
-
     if (taskIndex === -1) {
         return res.status(404).json({ error: "Task not found" });
     }
-
     tasks.splice(taskIndex, 1);
     res.json({ message: "Task deleted successfully" });
 });
 
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
 });
 
-export default app;
 export { server };
 </code></pre>
         </article>
@@ -168,13 +198,13 @@ export { server };
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="app.module_js.html">app.js</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#deleteTask">deleteTask</a></li><li><a href="global.html#getTasks">getTasks</a></li><li><a href="global.html#updateTask">updateTask</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Jan 29 2025 15:56:17 GMT+0100 (heure normale d’Europe centrale)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 30 2025 16:00:08 GMT+0100 (heure normale d’Europe centrale)
 </footer>
 
 <script> prettyPrint(); </script>

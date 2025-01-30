@@ -47,6 +47,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
  *     responses:
  *       201:
  *         description: Task created successfully
+ *
+ * @function
+ * @name createTask
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
  */
 app.post('/tasks', (req, res) => {
     const { title, completed } = req.body;
@@ -66,6 +71,11 @@ app.post('/tasks', (req, res) => {
  *     responses:
  *       200:
  *         description: A list of tasks
+ *
+ * @function
+ * @name getTasks
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
  */
 app.get('/tasks', (req, res) => {
     res.json(tasks);
@@ -96,6 +106,11 @@ app.get('/tasks', (req, res) => {
  *     responses:
  *       200:
  *         description: Task updated successfully
+ *
+ * @function
+ * @name updateTask
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
  */
 app.put('/tasks/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
@@ -123,6 +138,11 @@ app.put('/tasks/:id', (req, res) => {
  *     responses:
  *       200:
  *         description: Task deleted successfully
+ *
+ * @function
+ * @name deleteTask
+ * @param {express.Request} req - The request object.
+ * @param {express.Response} res - The response object.
  */
 app.delete('/tasks/:id', (req, res) => {
     const taskId = parseInt(req.params.id);
