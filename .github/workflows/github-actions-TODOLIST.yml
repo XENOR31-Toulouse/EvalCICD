@@ -22,6 +22,8 @@ jobs:
     - name: Run unit tests
       run: npm test -- --detectOpenHandles
 
+    - name: Run Cypress
+      run: npm run cypress
 
     - name: Run linter
       run: npm run lint --if-present
